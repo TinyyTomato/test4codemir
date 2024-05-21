@@ -1,6 +1,6 @@
 /**
  * ```ts
- * import type { Analyzer } from "arangojs/analyzer.js";
+ * import type { Analyzer } from "arangojs/analyzer";
  * ```
  *
  * The "analyzer" module provides analyzer related types and interfaces
@@ -8,10 +8,10 @@
  *
  * @packageDocumentation
  */
-import { ArangoApiResponse } from "./connection.js";
-import { Database } from "./database.js";
-import { isArangoError } from "./error.js";
-import { ANALYZER_NOT_FOUND } from "./lib/codes.js";
+import { ArangoApiResponse } from "./connection";
+import { Database } from "./database";
+import { isArangoError } from "./error";
+import { ANALYZER_NOT_FOUND } from "./lib/codes";
 
 /**
  * Indicates whether the given value represents an {@link Analyzer}.
@@ -33,7 +33,6 @@ export type AnalyzerFeature = "frequency" | "norm" | "position" | "offset";
 export type CreateAnalyzerOptions =
   | CreateIdentityAnalyzerOptions
   | CreateDelimiterAnalyzerOptions
-  | CreateMultiDelimiterAnalyzerOptions
   | CreateStemAnalyzerOptions
   | CreateNormAnalyzerOptions
   | CreateNgramAnalyzerOptions
@@ -46,10 +45,8 @@ export type CreateAnalyzerOptions =
   | CreateMinHashAnalyzerOptions
   | CreateClassificationAnalyzerOptions
   | CreateNearestNeighborsAnalyzerOptions
-  | CreateWildcardAnalyzerOptions
   | CreateGeoJsonAnalyzerOptions
-  | CreateGeoPointAnalyzerOptions
-  | CreateGeoS2AnalyzerOptions;
+  | CreateGeoPointAnalyzerOptions;
 
 /**
  * Options for creating an Identity Analyzer.
@@ -90,27 +87,6 @@ export type CreateDelimiterAnalyzerOptions = {
    * in RFC 4180, without starting new records on newlines.
    */
   properties: string | { delimiter: string };
-};
-
-/**
- * Options for creating a Multi-Delimiter Analyzer.
- */
-export type CreateMultiDelimiterAnalyzerOptions = {
-  /**
-   * Type of the Analyzer.
-   */
-  type: "multi_delimiter";
-  /**
-   * Features to enable for this Analyzer.
-   */
-  features?: AnalyzerFeature[];
-  /**
-   * Additional properties for the Analyzer.
-   *
-   * The value will be used as delimiter to split text into tokens as specified
-   * in RFC 4180, without starting new records on newlines.
-   */
-  properties: { delimiters: string[] };
 };
 
 /**
@@ -427,7 +403,7 @@ export type CreateCollationAnalyzerOptions = {
 };
 
 /**
- * (Enterprise Edition only.) Options for creating a MinHash Analyzer
+ * Options for creating a MinHash Analyzer
  */
 export type CreateMinHashAnalyzerOptions = {
   /**
@@ -454,7 +430,7 @@ export type CreateMinHashAnalyzerOptions = {
 };
 
 /**
- * (Enterprise Edition only.) Options for creating a Classification Analyzer
+ * Options for creating a Classification Analyzer
  */
 export type CreateClassificationAnalyzerOptions = {
   /**
@@ -489,7 +465,7 @@ export type CreateClassificationAnalyzerOptions = {
 };
 
 /**
- * (Enterprise Edition only.) Options for creating a NearestNeighbors Analyzer.
+ * Options for creating a NearestNeighbors Analyzer
  */
 export type CreateNearestNeighborsAnalyzerOptions = {
   /**
@@ -514,33 +490,6 @@ export type CreateNearestNeighborsAnalyzerOptions = {
      * Default: `1`
      */
     top_k?: number;
-  };
-};
-
-/**
- * Options for creating a Wildcard Analyzer.
- */
-export type CreateWildcardAnalyzerOptions = {
-  /**
-   * Type of the Analyzer.
-   */
-  type: "wildcard";
-  /**
-   * Features to enable for this Analyzer.
-   */
-  features?: AnalyzerFeature[];
-  /**
-   * Additional properties for the Analyzer.
-   */
-  properties: {
-    /**
-     * N-gram length. Must be a positive integer greater than or equal to 2.
-     */
-    ngramSize: string;
-    /**
-     * An Analyzer definition-like object with `type` and `properties` attributes.
-     */
-    analyzer?: Omit<CreateAnalyzerOptions, "features">;
   };
 };
 
@@ -615,54 +564,6 @@ export type CreateGeoPointAnalyzerOptions = {
 };
 
 /**
- * (Enterprise Edition only.) Options for creating a Geo S2 Analyzer
- */
-export type CreateGeoS2AnalyzerOptions = {
-  /**
-   * Type of the Analyzer.
-   */
-  type: "geo_s2";
-  /**
-   * Features to enable for this Analyzer.
-   */
-  features?: AnalyzerFeature[];
-  /**
-   * Additional properties for the Analyzer.
-   */
-  properties: {
-    /**
-     * If set to `"centroid"`, only the centroid of the input geometry will be
-     * computed and indexed.
-     *
-     * If set to `"point"` only GeoJSON objects of type Point will be indexed and
-     * all other geometry types will be ignored.
-     *
-     * Default: `"shape"`
-     */
-    type?: "shape" | "centroid" | "point";
-    /**
-     * Options for fine-tuning geo queries.
-     *
-     * Default: `{ maxCells: 20, minLevel: 4, maxLevel: 23 }`
-     */
-    options?: { maxCells?: number; minLevel?: number; maxLevel?: number };
-    /**
-     * If set to `"latLngDouble"`, each latitude and longitude value is stored
-     * as an 8-byte floating-point value (16 bytes per coordinate pair).
-     *
-     * If set to `"latLngInt"`, each latitude and longitude value is stored as
-     * a 4-byte integer value (8 bytes per coordinate pair).
-     *
-     * If set to `"s2Point"`, each longitude-latitude pair is stored in the
-     * native format of Google S2 (24 bytes per coordinate pair).
-     *
-     * Default: `"latLngDouble"`
-     */
-    format?: "latLngDouble" | "latLngInt" | "s2Point";
-  };
-};
-
-/**
  * Shared attributes of all Analyzer descriptions.
  */
 export type GenericAnalyzerDescription = {
@@ -682,7 +583,6 @@ export type GenericAnalyzerDescription = {
 export type AnalyzerDescription =
   | IdentityAnalyzerDescription
   | DelimiterAnalyzerDescription
-  | MultiDelimiterAnalyzerDescription
   | StemAnalyzerDescription
   | NormAnalyzerDescription
   | NgramAnalyzerDescription
@@ -695,10 +595,8 @@ export type AnalyzerDescription =
   | MinHashAnalyzerDescription
   | ClassificationAnalyzerDescription
   | NearestNeighborsAnalyzerDescription
-  | WildcardAnalyzerDescription
   | GeoJsonAnalyzerDescription
-  | GeoPointAnalyzerDescription
-  | GeoS2AnalyzerDescription;
+  | GeoPointAnalyzerDescription;
 
 /**
  * An object describing an Identity Analyzer.
@@ -714,14 +612,6 @@ export type IdentityAnalyzerDescription = GenericAnalyzerDescription & {
 export type DelimiterAnalyzerDescription = GenericAnalyzerDescription & {
   type: "delimiter";
   properties: { delimiter: string };
-};
-
-/**
- * An object describing a Multi Delimiter Analyzer.
- */
-export type MultiDelimiterAnalyzerDescription = GenericAnalyzerDescription & {
-  type: "multi_delimiter";
-  properties: { delimiters: string[] };
 };
 
 /**
@@ -864,17 +754,6 @@ export type NearestNeighborsAnalyzerDescription = GenericAnalyzerDescription & {
 };
 
 /**
- * An object describing a Wildcard Analyzer
- */
-export type WildcardAnalyzerDescription = GenericAnalyzerDescription & {
-  type: "wildcard";
-  properties: {
-    ngramSize: number;
-    analyzer?: Omit<AnalyzerDescription, "name" | "features">;
-  };
-};
-
-/**
  * An object describing a GeoJSON Analyzer
  */
 export type GeoJsonAnalyzerDescription = GenericAnalyzerDescription & {
@@ -898,18 +777,6 @@ export type GeoPointAnalyzerDescription = GenericAnalyzerDescription & {
 };
 
 /**
- * (Enterprise Edition only.) An object describing a GeoS2 Analyzer
- */
-export type GeoS2AnalyzerDescription = GenericAnalyzerDescription & {
-  type: "geo_s2";
-  properties: {
-    type: "shape" | "centroid" | "point";
-    description: { maxCells: number; minLevel: number; maxLevel: number };
-    format: "latLngDouble" | "latLngInt" | "s2Point";
-  };
-};
-
-/**
  * Represents an Analyzer in a {@link database.Database}.
  */
 export class Analyzer {
@@ -921,7 +788,7 @@ export class Analyzer {
    */
   constructor(db: Database, name: string) {
     this._db = db;
-    this._name = name;
+    this._name = name.normalize("NFC");
   }
 
   /**
@@ -1003,38 +870,36 @@ export class Analyzer {
     Options extends CreateIdentityAnalyzerOptions
       ? IdentityAnalyzerDescription
       : Options extends CreateDelimiterAnalyzerOptions
-        ? DelimiterAnalyzerDescription
-        : Options extends CreateStemAnalyzerOptions
-          ? StemAnalyzerDescription
-          : Options extends CreateNormAnalyzerOptions
-            ? NormAnalyzerDescription
-            : Options extends CreateNgramAnalyzerOptions
-              ? NgramAnalyzerDescription
-              : Options extends CreateTextAnalyzerOptions
-                ? TextAnalyzerDescription
-                : Options extends CreateSegmentationAnalyzerOptions
-                  ? SegmentationAnalyzerDescription
-                  : Options extends CreateAqlAnalyzerOptions
-                    ? AqlAnalyzerDescription
-                    : Options extends CreatePipelineAnalyzerOptions
-                      ? PipelineAnalyzerDescription
-                      : Options extends CreateStopwordsAnalyzerOptions
-                        ? StopwordsAnalyzerDescription
-                        : Options extends CreateCollationAnalyzerOptions
-                          ? CollationAnalyzerDescription
-                          : Options extends CreateMinHashAnalyzerOptions
-                            ? MinHashAnalyzerDescription
-                            : Options extends CreateClassificationAnalyzerOptions
-                              ? ClassificationAnalyzerDescription
-                              : Options extends CreateNearestNeighborsAnalyzerOptions
-                                ? NearestNeighborsAnalyzerDescription
-                                : Options extends CreateGeoJsonAnalyzerOptions
-                                  ? GeoJsonAnalyzerDescription
-                                  : Options extends CreateGeoPointAnalyzerOptions
-                                    ? GeoPointAnalyzerDescription
-                                    : Options extends CreateGeoS2AnalyzerOptions
-                                      ? GeoS2AnalyzerDescription
-                                      : AnalyzerDescription
+      ? DelimiterAnalyzerDescription
+      : Options extends CreateStemAnalyzerOptions
+      ? StemAnalyzerDescription
+      : Options extends CreateNormAnalyzerOptions
+      ? NormAnalyzerDescription
+      : Options extends CreateNgramAnalyzerOptions
+      ? NgramAnalyzerDescription
+      : Options extends CreateTextAnalyzerOptions
+      ? TextAnalyzerDescription
+      : Options extends CreateSegmentationAnalyzerOptions
+      ? SegmentationAnalyzerDescription
+      : Options extends CreateAqlAnalyzerOptions
+      ? AqlAnalyzerDescription
+      : Options extends CreatePipelineAnalyzerOptions
+      ? PipelineAnalyzerDescription
+      : Options extends CreateStopwordsAnalyzerOptions
+      ? StopwordsAnalyzerDescription
+      : Options extends CreateCollationAnalyzerOptions
+      ? CollationAnalyzerDescription
+      : Options extends CreateMinHashAnalyzerOptions
+      ? MinHashAnalyzerDescription
+      : Options extends CreateClassificationAnalyzerOptions
+      ? ClassificationAnalyzerDescription
+      : Options extends CreateNearestNeighborsAnalyzerOptions
+      ? NearestNeighborsAnalyzerDescription
+      : Options extends CreateGeoJsonAnalyzerOptions
+      ? GeoJsonAnalyzerDescription
+      : Options extends CreateGeoPointAnalyzerOptions
+      ? GeoPointAnalyzerDescription
+      : AnalyzerDescription
   > {
     return this._db.request({
       method: "POST",
@@ -1061,7 +926,7 @@ export class Analyzer {
     return this._db.request({
       method: "DELETE",
       path: `/_api/analyzer/${encodeURIComponent(this._name)}`,
-      search: { force },
+      qs: { force },
     });
   }
 }
